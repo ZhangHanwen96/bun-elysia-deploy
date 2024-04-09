@@ -5,7 +5,7 @@ RUN bun install
 COPY . .
  
 ENV NODE_ENV production
-ARG PORT
-EXPOSE ${PORT:-3000}
+
+EXPOSE 3000
  
 CMD ["bun", "start"]
