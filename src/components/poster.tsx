@@ -1,15 +1,31 @@
 import { FC } from "react";
 // 1792 × 2304
 
-export const Poster: FC<{
-    product: string;
-    logo: string;
-}> = ({ product, logo }) => {
+type Logo = {
+    x?: number;
+    y?: number;
+    url: string;
+    width: number;
+    height: number;
+};
+
+type Product = {
+    url: string;
+    width: number;
+    height: number;
+};
+
+type PosterProps = {
+    logo: Logo;
+    product: Product;
+};
+
+export const Poster: FC<PosterProps> = ({ product, logo }) => {
     return (
         <div
             style={{
-                height: 1792,
-                width: 2304,
+                width: `${product.width}px`,
+                height: `${product.height}px`,
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -21,7 +37,7 @@ export const Poster: FC<{
             }}
         >
             <img
-                src={product}
+                src={product.url}
                 style={{
                     width: "100%",
                     height: "100%",
@@ -30,33 +46,32 @@ export const Poster: FC<{
                 }}
             />
             <img
-                src={logo}
-                width="48"
-                height="48"
+                src={logo.url}
+                width={logo.width + "px"}
+                height={logo.height + "px"}
                 style={{
                     position: "absolute",
-                    left: "10px",
-                    top: "10px",
+                    left: logo.x + "px" || "10px",
+                    top: logo.y + "px" || "10px",
                 }}
             />
             <div
                 style={{
                     color: "white",
-                    fontSize: 72,
+                    fontSize: 200,
                     fontWeight: 600,
-                    textShadow: "#D4166C 4px 4px",
+                    textShadow: "#D4166C 12px 12px",
                 }}
             >
-                指挥官
+                COMMANDER
             </div>
             <div
                 style={{
                     marginTop: 40,
                     color: "white",
-                    textShadow: "#FC0 1px 0 10px",
                     display: "flex",
-                    zIndex: 1,
-                    padding: "5px 30px",
+                    fontSize: 120,
+                    padding: "10px 40px",
                     background: "#00000070",
                     borderRadius: "100px",
                 }}
@@ -64,9 +79,9 @@ export const Poster: FC<{
                 <span>Hello, World</span>
                 <span
                     style={{
-                        color: "white",
-                        textShadow: "#FC0 1px 0 10px",
-                        marginLeft: "10px",
+                        color: "#FC0",
+                        // textShadow: "#FC0 1px 0 10px",
+                        marginLeft: "50px",
                     }}
                 >
                     AIMA

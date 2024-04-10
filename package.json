@@ -8,11 +8,13 @@
   },
   "dependencies": {
     "elysia": "latest",
+    "file-type": "^19.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "satori": "^0.10.13"
   },
   "devDependencies": {
+    "@bogeychan/elysia-logger": "^0.0.20",
     "@resvg/resvg-js": "^2.6.2",
     "@types/react": "^18.2.75",
     "@types/react-dom": "^18.2.24",
