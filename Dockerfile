@@ -2,9 +2,8 @@ FROM oven/bun
 
 WORKDIR /app
 
-COPY package*.json bun.lockb ./
-COPY bunfig.toml .
-RUN bun install --production
+COPY package*.json bun.lockb bunfig.toml ./
+RUN bun install
 
 COPY src src
 COPY tsconfig.json .
@@ -12,6 +11,6 @@ COPY tsconfig.json .
  
 ENV NODE_ENV production
 
-EXPOSE 8080
+EXPOSE 3000
  
-CMD ["bun", "start"]
+CMD ["bun", "src/index.tsx"]
