@@ -2,14 +2,15 @@ import { Elysia, t } from "elysia";
 import satori from "satori";
 import path from "node:path";
 import fs from "node:fs/promises";
+import { staticPlugin } from "@elysiajs/static";
+import { serverTiming } from "@elysiajs/server-timing";
+import { cors } from "@elysiajs/cors";
 import mime from "mime-types";
-import { logger } from "@bogeychan/elysia-logger";
+import { createPinoLogger } from "@bogeychan/elysia-logger";
 import { Resvg } from "@resvg/resvg-js";
 import { imageSize } from "image-size";
 import { Poster } from "./components/poster";
-import filetype, { fileTypeFromBuffer, fileTypeFromBlob } from "file-type";
-import { z } from "zod";
-import { toArrayBuffer } from "bun:ffi";
+import swagger from "@elysiajs/swagger";
 
 __dirname = __dirname || new URL(".", import.meta.url).pathname;
 
@@ -17,12 +18,38 @@ const robotoNormal = Bun.file(
     path.join(__dirname, "../fonts/Roboto/Roboto-Regular.ttf")
 );
 
+const logger = createPinoLogger({
+    transport: {
+        target: "pino-pretty",
+        options: {
+            colorize: true,
+            colorizeObjects: true,
+        },
+    },
+});
+
 const app = new Elysia()
+    .use(serverTiming())
+    .use(swagger())
+    .use(staticPlugin())
+    .use(cors())
     .use(
-        logger({
-            stream: console,
+        logger.into({
             autoLogging: true,
         })
+    )
+    .post(
+        "/poster-workflow",
+        (ctx) => {
+            return {
+                result: ctx.body.background,
+            };
+        },
+        {
+            body: t.Object({
+                background: t.String(),
+            }),
+        }
     )
     .get(
         "/poster",
@@ -99,6 +126,90 @@ const app = new Elysia()
             }),
         }
     )
+    .post(
+        "/poster",
+        async (ctx) => {
+            const { background, logo } = ctx.body;
+
+            const [backgroundArrayBuffer, logoArrayBuffer] = await Promise.all(
+                [background.url, logo.url].map((url) => {
+                    return fetch(url, {
+                        method: "GET",
+                    }).then((r) => r.arrayBuffer());
+                })
+            );
+
+            const logoDimension = imageSize(Buffer.from(logoArrayBuffer));
+
+            const props = {
+                background: {
+                    url: backgroundArrayBuffer,
+                    height: background.height,
+                    width: background.width,
+                },
+                logo: {
+                    url: logoArrayBuffer,
+                    height: logo.height ?? logoDimension.height,
+                    width: logo.width ?? logoDimension.width,
+                    x: logo.x ?? 24,
+                    y: logo.y ?? 24,
+                },
+            };
+            try {
+                const svg = await satori(
+                    <Poster {...props} bannerText={ctx.body.bannerText} />,
+                    {
+                        height: props.background.height,
+                        width: props.background.width,
+                        fonts: [
+                            {
+                                name: "Roboto",
+                                data: await robotoNormal.arrayBuffer(),
+                                weight: 400,
+                                style: "normal",
+                            },
+                        ],
+                        embedFont: true,
+                    }
+                );
+                // render png
+                const resvg = new Resvg(svg, {
+                    background: "rgba(0, 0, 0, 0)",
+                });
+                const pngData = resvg.render();
+                const pngBuffer = pngData.asPng();
+                ctx.set.headers["Content-Type"] = "image/png";
+                return pngBuffer;
+            } catch (error) {
+                ctx.log.error(error);
+                ctx.set.status = 500;
+            }
+        },
+        {
+            body: t.Object({
+                bannerText: t.Array(
+                    t.Object({
+                        style: t.Optional(t.Object({})),
+                        text: t.String(),
+                    })
+                ),
+                background: t.Object({
+                    url: t.String(),
+                    width: t.Numeric(),
+                    height: t.Numeric(),
+                    style: t.Optional(t.Object({})),
+                }),
+                logo: t.Object({
+                    url: t.String(),
+                    x: t.Optional(t.Numeric()),
+                    y: t.Optional(t.Numeric()),
+                    width: t.Optional(t.Numeric()),
+                    height: t.Optional(t.Numeric()),
+                    style: t.Optional(t.Object({})),
+                }),
+            }),
+        }
+    )
     .get("/jsx", async (set) => {
         const svg = await satori(<App />, {
             width: 800,
@@ -126,7 +237,7 @@ function App() {
                 <div tw="flex flex-col md:flex-row w-full py-12 px-4 md:items-center justify-between p-8">
                     <h2 tw="flex flex-col text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 text-left">
                         <span>Ready to dive in?</span>
-                        <span tw="text-indigo-600">
+                        <span tw="text-indigo-600" className="">
                             Start your free trial today.
                         </span>
                     </h2>

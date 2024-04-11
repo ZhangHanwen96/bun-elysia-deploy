@@ -1,0 +1,27 @@
+{
+    "bannerText": [
+        {
+            "style": {
+                "color": "white",
+                "marginLeft": "20px"
+            },
+            "text": "Welcome To"
+        },
+        {
+            "style": {
+                "color": "#FC0"
+            },
+            "text": "AIAM"
+        }
+    ],
+    "background": {
+        "width": 800,
+        "height": 600,
+        "url": "https://itg-tezign-files.tezign.com/t32/8db8e5ea17ff97473d20f48d78cf56ad.png?Expires=1714579199&OSSAccessKeyId=LTAI5tDubGKMRMroG8MuTLZo&Signature=bTExDg%2F1DGVlT8cjJOxBxQbo%2F5c%3D&response-content-disposition=inline"
+    },
+    "logo": {
+        "url": "https://itg-tezign-files.tezign.com/t32/8db8e5ea17ff97473d20f48d78cf56ad.png?Expires=1714579199&OSSAccessKeyId=LTAI5tDubGKMRMroG8MuTLZo&Signature=bTExDg%2F1DGVlT8cjJOxBxQbo%2F5c%3D&response-content-disposition=inline",
+        "width": 100,
+        "height": 100
+    }
+}

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { CSSProperties, FC } from "react";
 // 1792 × 2304
 
 type Logo = {
@@ -9,23 +9,36 @@ type Logo = {
     height: number;
 };
 
-type Product = {
+type Background = {
     url: string;
     width: number;
     height: number;
 };
 
-type PosterProps = {
-    logo: Logo;
-    product: Product;
+type BannerText = {
+    text: string;
+    style?: CSSProperties;
 };
 
-export const Poster: FC<PosterProps> = ({ product, logo }) => {
+type PosterProps = {
+    logo: Logo;
+    background: Background;
+    bannerText: BannerText[];
+    productName: string;
+};
+
+export const Poster: FC<PosterProps> = ({
+    background,
+    logo,
+    bannerText,
+    productName,
+}) => {
+    console.log("bannerText", bannerText);
     return (
         <div
             style={{
-                width: `${product.width}px`,
-                height: `${product.height}px`,
+                width: `${background.width}px`,
+                height: `${background.height}px`,
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -37,7 +50,7 @@ export const Poster: FC<PosterProps> = ({ product, logo }) => {
             }}
         >
             <img
-                src={product.url}
+                src={background.url}
                 style={{
                     width: "100%",
                     height: "100%",
@@ -60,10 +73,10 @@ export const Poster: FC<PosterProps> = ({ product, logo }) => {
                     color: "white",
                     fontSize: 100,
                     fontWeight: 600,
-                    textShadow: "#D4166C 12px 12px",
+                    textShadow: "#D4166C 8px 8px",
                 }}
             >
-                COMMANDER
+                {productName}
             </div>
             <div
                 style={{
@@ -76,16 +89,13 @@ export const Poster: FC<PosterProps> = ({ product, logo }) => {
                     borderRadius: "100px",
                 }}
             >
-                <span>Hello, World</span>
-                <span
-                    style={{
-                        color: "#FC0",
-                        // textShadow: "#FC0 1px 0 10px",
-                        marginLeft: "50px",
-                    }}
-                >
-                    AIMA
-                </span>
+                {bannerText.map(({ style, text }, index) => {
+                    return (
+                        <span style={style} key={index}>
+                            {text}
+                        </span>
+                    );
+                })}
             </div>
         </div>
     );
