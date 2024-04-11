@@ -3,6 +3,7 @@ FROM oven/bun
 WORKDIR /app
 
 COPY package*.json bun.lockb ./
+COPY bunfig.toml .
 RUN bun install --production
 
 COPY src src
