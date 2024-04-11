@@ -1,12 +1,15 @@
-import { Elysia } from "elysia";
+import { Elysia, t } from "elysia";
 import satori from "satori";
 import path from "node:path";
 import fs from "node:fs/promises";
+import mime from "mime-types";
 import { logger } from "@bogeychan/elysia-logger";
 import { Resvg } from "@resvg/resvg-js";
 import { imageSize } from "image-size";
 import { Poster } from "./components/poster";
-import filetype, { fileTypeFromBuffer } from "file-type";
+import filetype, { fileTypeFromBuffer, fileTypeFromBlob } from "file-type";
+import { z } from "zod";
+import { toArrayBuffer } from "bun:ffi";
 
 __dirname = __dirname || new URL(".", import.meta.url).pathname;
 
@@ -21,74 +24,81 @@ const app = new Elysia()
             autoLogging: true,
         })
     )
-    .get("/poster", async (req) => {
-        const logoBuffer = await fs.readFile(
-            path.resolve(__dirname, "./components/logo.svg")
-        );
-        const productBuffer = await fs.readFile(
-            path.resolve(__dirname, "./components/product.png")
-        );
-
-        const logoType = await fileTypeFromBuffer(logoBuffer);
-        const pType = await fileTypeFromBuffer(productBuffer);
-
-        const logo64 = logoBuffer.toString("base64");
-        const product64 = productBuffer.toString("base64");
-
-        const logoDimension = imageSize(logoBuffer);
-        const pDimension = imageSize(productBuffer);
-
-        const product = {
-            url: `data:image/png;base64,${product64}`,
-            height: pDimension.height,
-            width: pDimension.width,
-        };
-
-        const logo = {
-            url: `data:image/svg+xml;base64,${logo64}`,
-            height: logoDimension.height,
-            width: logoDimension.width,
-            x: 24,
-            y: 24,
-        };
-
-        req.log.info(logoDimension);
-
-        try {
-            const svg = await satori(
-                <Poster
-                    // logo={logo}
-                    logo={logo}
-                    product={product}
-                />,
-                {
-                    height: product.height,
-                    width: product.width,
-                    fonts: [
-                        {
-                            name: "Roboto",
-                            data: await robotoNormal.arrayBuffer(),
-                            weight: 400,
-                            style: "normal",
-                        },
-                    ],
-                    embedFont: true,
-                    // debug: true,
-                }
+    .get(
+        "/poster",
+        async (req) => {
+            const logoBuffer = await fs.readFile(
+                path.resolve(__dirname, "./components/logo.svg")
             );
-            // render png
-            const resvg = new Resvg(svg, {
-                background: "rgba(238, 235, 230, 0)",
-            });
-            const pngData = resvg.render();
-            const pngBuffer = pngData.asPng();
-            req.set.headers["Content-Type"] = "image/png";
-            return pngBuffer;
-        } catch (error) {
-            req.log.error(error);
-            req.set.status = 500;
+            const pUrl = req.query.background;
+
+            const productImage = await fetch(pUrl, {
+                method: "GET",
+            }).then((r) => r.arrayBuffer());
+
+            const logo64 = logoBuffer.toString("base64");
+
+            const logoDimension = imageSize(logoBuffer);
+            const pDimension = imageSize(Buffer.from(productImage));
+
+            const product = {
+                // url: `data:image/png;base64,${product64}`,
+                url: productImage,
+                height: pDimension.height,
+                width: pDimension.width,
+            };
+
+            const logo = {
+                url: `data:image/svg+xml;base64,${logo64}`,
+                // url: productImage,
+                height: logoDimension.height,
+                width: logoDimension.width,
+                x: 24,
+                y: 24,
+            };
+
+            try {
+                const svg = await satori(
+                    <Poster
+                        // logo={logo}
+                        logo={logo}
+                        product={product}
+                    />,
+                    {
+                        height: product.height,
+                        width: product.width,
+                        fonts: [
+                            {
+                                name: "Roboto",
+                                data: await robotoNormal.arrayBuffer(),
+                                weight: 400,
+                                style: "normal",
+                            },
+                        ],
+                        embedFont: true,
+                        // debug: true,
+                    }
+                );
+                // render png
+                const resvg = new Resvg(svg, {
+                    background: "rgba(238, 235, 230, 0)",
+                });
+                const pngData = resvg.render();
+                const pngBuffer = pngData.asPng();
+                req.set.headers["Content-Type"] = "image/png";
+                return pngBuffer;
+            } catch (error) {
+                req.log.error(error);
+                req.set.status = 500;
+            }
+        },
+        {
+            query: t.Object({
+                background: t.String(),
+                logo: t.Optional(t.String()),
+            }),
         }
-    })
+    )
     .get("/jsx", async (set) => {
         const svg = await satori(<App />, {
             width: 800,

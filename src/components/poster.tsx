@@ -58,7 +58,7 @@ export const Poster: FC<PosterProps> = ({ product, logo }) => {
             <div
                 style={{
                     color: "white",
-                    fontSize: 200,
+                    fontSize: 100,
                     fontWeight: 600,
                     textShadow: "#D4166C 12px 12px",
                 }}
@@ -70,7 +70,7 @@ export const Poster: FC<PosterProps> = ({ product, logo }) => {
                     marginTop: 40,
                     color: "white",
                     display: "flex",
-                    fontSize: 120,
+                    fontSize: 60,
                     padding: "10px 40px",
                     background: "#00000070",
                     borderRadius: "100px",

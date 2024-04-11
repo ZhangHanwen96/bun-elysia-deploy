@@ -1,25 +1,28 @@
 {
-  "name": "app",
-  "version": "1.0.50",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts",
-    "start": "bun run src/index.tsx"
-  },
-  "dependencies": {
-    "elysia": "latest",
-    "file-type": "^19.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "satori": "^0.10.13"
-  },
-  "devDependencies": {
-    "@bogeychan/elysia-logger": "^0.0.20",
-    "@resvg/resvg-js": "^2.6.2",
-    "@types/react": "^18.2.75",
-    "@types/react-dom": "^18.2.24",
-    "bun-types": "latest",
-    "image-size": "^1.1.1"
-  },
-  "module": "src/index.js"
+    "name": "app",
+    "version": "1.0.50",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "bun run --watch src/index.ts",
+        "start": "bun run --watch src/index.tsx"
+    },
+    "dependencies": {
+        "elysia": "latest",
+        "file-type": "^19.0.0",
+        "mime-types": "^2.1.35",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "satori": "^0.10.13",
+        "zod": "^3.22.4"
+    },
+    "devDependencies": {
+        "@bogeychan/elysia-logger": "^0.0.20",
+        "@resvg/resvg-js": "^2.6.2",
+        "@types/mime-types": "^2.1.4",
+        "@types/react": "^18.2.75",
+        "@types/react-dom": "^18.2.24",
+        "bun-types": "latest",
+        "image-size": "^1.1.1"
+    },
+    "module": "src/index.js"
 }
