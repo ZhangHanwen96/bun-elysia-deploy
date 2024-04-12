@@ -5,11 +5,10 @@ WORKDIR /app
 COPY package*.json bun.lockb bunfig.toml ./
 RUN bun install --frozen-lockfile
 
-COPY . .
-# COPY src src
-# COPY tsconfig.json .
-# COPY public public
-# COPY public public
+# COPY . .
+COPY src src
+COPY tsconfig.json .
+COPY public public
  
 ENV NODE_ENV production
 
