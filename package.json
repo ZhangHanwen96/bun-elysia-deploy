@@ -17,17 +17,17 @@
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "satori": "^0.10.13",
-        "zod": "^3.22.4"
+        "zod": "^3.22.4",
+        "@bogeychan/elysia-logger": "^0.0.20",
+        "image-size": "^1.1.1",
+        "pino-pretty": "^11.0.0",
+        "@resvg/resvg-js": "^2.6.2"
     },
     "devDependencies": {
-        "@bogeychan/elysia-logger": "^0.0.20",
-        "@resvg/resvg-js": "^2.6.2",
         "@types/mime-types": "^2.1.4",
         "@types/react": "^18.2.75",
         "@types/react-dom": "^18.2.24",
-        "bun-types": "latest",
-        "image-size": "^1.1.1",
-        "pino-pretty": "^11.0.0"
+        "bun-types": "latest"
     },
     "module": "src/index.js"
 }

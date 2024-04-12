@@ -3,10 +3,12 @@ FROM oven/bun
 WORKDIR /app
 
 COPY package*.json bun.lockb bunfig.toml ./
-RUN bun install
+RUN bun install --frozen-lockfile
 
-COPY src src
-COPY tsconfig.json .
+COPY . .
+# COPY src src
+# COPY tsconfig.json .
+# COPY public public
 # COPY public public
  
 ENV NODE_ENV production
