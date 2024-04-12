@@ -1,4 +1,4 @@
-FROM oven/bun
+FROM dockerhub.tezign.com/tekton/oven-bun:1.1.3
 
 WORKDIR /app
 
