@@ -1,35 +1,43 @@
 {
-  "name": "app",
-  "version": "1.0.50",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.tsx",
-    "start": "bun run src/index.tsx"
-  },
-  "dependencies": {
-    "@biomejs/biome": "^1.6.4",
-    "@bogeychan/elysia-logger": "^0.0.20",
-    "@elysiajs/cors": "^1.0.2",
-    "@elysiajs/eden": "^1.0.11",
-    "@elysiajs/server-timing": "^1.0.2",
-    "@elysiajs/static": "^1.0.2",
-    "@elysiajs/swagger": "^1.0.3",
-    "@resvg/resvg-js": "^2.6.2",
-    "elysia": "latest",
-    "file-type": "^19.0.0",
-    "image-size": "^1.1.1",
-    "mime-types": "^2.1.35",
-    "pino-pretty": "^11.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "satori": "^0.10.13",
-    "zod": "^3.22.4"
-  },
-  "devDependencies": {
-    "@types/mime-types": "^2.1.4",
-    "@types/react": "^18.2.75",
-    "@types/react-dom": "^18.2.24",
-    "bun-types": "latest"
-  },
-  "module": "src/index.js"
+    "name": "app",
+    "version": "1.0.50",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "bun run --hot src/index.tsx",
+        "start": "bun run src/index.tsx"
+    },
+    "dependencies": {
+        "@biomejs/biome": "^1.6.4",
+        "@bogeychan/elysia-logger": "^0.0.20",
+        "@elysiajs/cors": "^1.0.2",
+        "@elysiajs/eden": "^1.0.11",
+        "@elysiajs/server-timing": "^1.0.2",
+        "@elysiajs/static": "^1.0.2",
+        "@elysiajs/swagger": "^1.0.3",
+        "@resvg/resvg-js": "^2.6.2",
+        "cors": "^2.8.5",
+        "elysia": "latest",
+        "esast-util-from-js": "^2.0.1",
+        "estree-util-build-jsx": "^3.0.1",
+        "estree-util-to-js": "^2.0.0",
+        "express": "^4.19.2",
+        "file-type": "^19.0.0",
+        "http-proxy-middleware": "^3.0.0",
+        "image-size": "^1.1.1",
+        "mime-types": "^2.1.35",
+        "pino-pretty": "^11.0.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "request": "^2.88.2",
+        "satori": "^0.10.13",
+        "sharp": "^0.33.3",
+        "zod": "^3.22.4"
+    },
+    "devDependencies": {
+        "@types/mime-types": "^2.1.4",
+        "@types/react": "^18.2.75",
+        "@types/react-dom": "^18.2.24",
+        "bun-types": "latest"
+    },
+    "module": "src/index.js"
 }

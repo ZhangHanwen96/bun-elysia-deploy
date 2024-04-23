@@ -1,5 +1,4 @@
 import type { CSSProperties, FC } from "react";
-// 1792 × 2304
 
 type Logo = {
 	x?: number;
@@ -33,7 +32,6 @@ export const Poster: FC<PosterProps> = ({
 	bannerText,
 	productName,
 }) => {
-	console.log("bannerText", bannerText);
 	return (
 		<div
 			style={{
@@ -73,24 +71,26 @@ export const Poster: FC<PosterProps> = ({
 			<div
 				style={{
 					color: "white",
-					fontSize: 100,
-					fontWeight: 900,
+					fontSize: 96,
+					fontWeight: 700,
 					textShadow: "#D4166C 8px 8px",
-					marginTop: "-200px",
+					position: 'absolute',
+					top: 120,
 				}}
 			>
 				{productName}
 			</div>
 			<div
 				style={{
-					marginTop: 40,
 					color: "white",
 					display: "flex",
-					fontSize: 24,
+					fontSize: 32,
 					padding: "10px 30px",
-					background: "#00000070",
+					background: "#00000080",
 					borderRadius: "100px",
-					fontWeight: 700,
+					fontWeight: 400,
+					position: 'absolute',
+					top: 270,
 				}}
 			>
 				{bannerText.map(({ style, text }, index) => {

@@ -3,6 +3,7 @@ import imageSize from "image-size";
 import satori from "satori";
 import { Poster } from "../../components/poster";
 import { Resvg } from "@resvg/resvg-js";
+import sharp from 'sharp'
 import path from "node:path";
 import { logger } from "../../logger";
 
@@ -107,9 +108,28 @@ const posterRoute = new Elysia({ prefix: "/poster" }).post(
 					defaultFontFamily: "HanSans",
 					defaultFontSize: 14,
 				},
+				// fitTo: {
+				// 	mode: 'zoom',
+				// 	value: 2
+				// }
 			});
 			const pngData = resvg.render();
 			const pngBuffer = pngData.asPng();
+			// const png = await sharp(pngBuffer).resize({
+			// 	width: background.width,
+			// 	height: background.height,
+			// }).png().toBuffer()
+			// const svgBuffer = Buffer.from(svg)
+			// const b = await sharp({
+			// 	create: {
+			// 	  width: background.width,
+			// 	  height:  background.height,
+			// 	  channels: 4,
+			// 	  background: { r: 255, g: 0, b: 0, alpha: 0 }
+			// 	}
+			//   }).composite([{
+			// 	input: svgBuffer,
+			// }]).png().toBuffer()
 			ctx.set.headers["Content-Type"] = "image/png";
 			return pngBuffer;
 			ctx.set.headers["Content-Type"] = "image/svg+xml";
@@ -145,5 +165,6 @@ const posterRoute = new Elysia({ prefix: "/poster" }).post(
 		}),
 	},
 );
+
 
 export default posterRoute;
